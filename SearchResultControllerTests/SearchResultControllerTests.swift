@@ -22,15 +22,26 @@ What can we test?
 
 class SearchResultControllerTests: XCTestCase {
 
+	// Naive approach
+	func testPerformSearchNaive() {
+		print("Test started")
+		let controller = SearchResultController()
+
+		controller.performSearch(for: "Garage Band", resultType: .software) {
+			XCTAssert(!controller.searchResults.isEmpty)
+			print("Test finished")
+		}
+	}
+
 	func testPerformSearch() {
 
-		let controller = SearchResultController(networkDataLoader: mock)
+		let controller = SearchResultController()
 
 		let exp = expectation(description: "Wait for iTunes API to return")
 
 		controller.performSearch(for: "Garage Band", resultType: .software) {
 			XCTAssert(!controller.searchResults.isEmpty)
-
+			exp.fulfill()
 		}
 
 		wait(for: [exp], timeout: 3)
